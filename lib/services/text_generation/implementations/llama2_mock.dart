@@ -1,4 +1,4 @@
-import 'package:pocketllama2/services/interfaces/text_generation_interface.dart';
+import '../text_generation_interface.dart';
 
 final class LlamaMock implements TextGenerationInterface {
   @override

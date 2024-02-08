@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/generate_text/generate_text_bloc.dart';
-import '../../../services/implementation/llama2_mock.dart';
+import '../../../services/text_generation/implementations/llama2_mock.dart';
 import '../../widgets/layout/column_container.dart';
 import 'widgets/generate_button.dart';
 import 'widgets/generated_text_output.dart';

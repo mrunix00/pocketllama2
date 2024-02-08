@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:pocketllama2/services/interfaces/text_generation_interface.dart';
+
+import '../../services/text_generation/text_generation_interface.dart';
 
 part 'generate_text_event.dart';
 part 'generate_text_state.dart';
