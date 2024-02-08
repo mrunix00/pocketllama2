@@ -11,7 +11,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('PocketLLama2'),
         actions: [
           IconButton(
@@ -35,5 +34,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-
