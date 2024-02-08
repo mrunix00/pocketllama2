@@ -8,13 +8,14 @@ part 'generate_text_state.dart';
 
 class GenerateTextBloc extends Bloc<GenerateTextEvent, GenerateTextState> {
   final TextGenerationInterface textGenerationInterface;
-  GenerateTextBloc(this.textGenerationInterface)
-      : super(GeneratingTextIdle()) {
+  GenerateTextBloc(this.textGenerationInterface) : super(GeneratingTextIdle()) {
     on<GenerateText>((event, emit) async {
-      emit(GeneratingTextInProgress());
-      final generatedText =
-          await textGenerationInterface.generateText(event.prompt);
-      emit(GeneratingTextSuccess(generatedText));
+      final textStream = textGenerationInterface
+          .generateText(event.prompt)
+          .asBroadcastStream();
+      emit(GeneratingTextInProgress(textStream));
+      final text = await textStream.last;
+      emit(GeneratingTextSuccess(text));
     });
   }
 }

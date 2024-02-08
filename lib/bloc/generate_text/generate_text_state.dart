@@ -9,13 +9,20 @@ sealed class GenerateTextState extends Equatable {
 
 final class GeneratingTextIdle extends GenerateTextState {}
 
-final class GeneratingTextInProgress extends GenerateTextState {}
+final class GeneratingTextInProgress extends GenerateTextState {
+  const GeneratingTextInProgress(this.textStream);
 
-final class GeneratingTextSuccess extends GenerateTextState {
-  final String generatedText;
-
-  const GeneratingTextSuccess(this.generatedText);
+  final Stream<String> textStream;
 
   @override
-  List<Object> get props => [generatedText];
+  List<Object> get props => [textStream];
+}
+
+final class GeneratingTextSuccess extends GenerateTextState {
+  const GeneratingTextSuccess(this.finalText);
+
+  final String finalText;
+
+  @override
+  List<Object> get props => [finalText];
 }

@@ -11,13 +11,21 @@ class GeneratedTextOutput extends StatelessWidget {
       child: SingleChildScrollView(
         child: BlocBuilder<GenerateTextBloc, GenerateTextState>(
           builder: (context, state) {
-            if (state is GeneratingTextSuccess) {
+            if (state is GeneratingTextInProgress) {
+              return StreamBuilder<String>(
+                stream: state.textStream,
+                builder: (context, snapshot) => Text(
+                  snapshot.data ?? '',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              );
+            } else if (state is GeneratingTextSuccess) {
               return Text(
-                state.generatedText,
+                state.finalText,
                 style: Theme.of(context).textTheme.bodyLarge,
               );
             }
-            return const Spacer();
+            return const SizedBox();
           },
         ),
       ),

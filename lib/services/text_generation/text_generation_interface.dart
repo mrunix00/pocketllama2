@@ -1,3 +1,3 @@
 abstract class TextGenerationInterface {
-  Future<String> generateText(String prompt);
+  Stream<String> generateText(String prompt);
 }
