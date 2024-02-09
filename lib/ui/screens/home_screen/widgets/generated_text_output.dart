@@ -8,25 +8,28 @@ class GeneratedTextOutput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: SingleChildScrollView(
-        child: BlocBuilder<GenerateTextBloc, GenerateTextState>(
-          builder: (context, state) {
-            if (state is GeneratingTextInProgress) {
-              return StreamBuilder<String>(
-                stream: state.textStream,
-                builder: (context, snapshot) => Text(
-                  snapshot.data ?? '',
+      child: Container(
+        margin: const EdgeInsets.all(10),
+        child: SingleChildScrollView(
+          child: BlocBuilder<GenerateTextBloc, GenerateTextState>(
+            builder: (context, state) {
+              if (state is GeneratingTextInProgress) {
+                return StreamBuilder<String>(
+                  stream: state.textStream,
+                  builder: (context, snapshot) => Text(
+                    snapshot.data ?? '',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                );
+              } else if (state is GeneratingTextSuccess) {
+                return Text(
+                  state.finalText,
                   style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              );
-            } else if (state is GeneratingTextSuccess) {
-              return Text(
-                state.finalText,
-                style: Theme.of(context).textTheme.bodyLarge,
-              );
-            }
-            return const SizedBox();
-          },
+                );
+              }
+              return const SizedBox();
+            },
+          ),
         ),
       ),
     );

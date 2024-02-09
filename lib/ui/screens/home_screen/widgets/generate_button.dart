@@ -25,7 +25,7 @@ class GenerateButton extends StatelessWidget {
                 GenerateText(prompt: controller.text),
               );
             },
-            icon: const Icon(Icons.send),
+            icon: const Icon(Icons.edit),
           );
         },
       ),

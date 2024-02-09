@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/generate_text/generate_text_bloc.dart';
@@ -18,7 +19,10 @@ class HomeScreen extends StatelessWidget {
       create: (context) => GenerateTextBloc(LlamaMock()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('PocketLLama2'),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            systemNavigationBarColor: Theme.of(context).colorScheme.background,
+          ),
+          title: const Text('PocketLlama2'),
           actions: [
             IconButton(
               onPressed: () {},
