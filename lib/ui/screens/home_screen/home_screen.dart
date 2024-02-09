@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is PromptedForDownload) {
             showDownloadModelDialog(context);
-          } else if (state is DownloadingModelInProgress) {
+          } else if (state is AcceptedDownload) {
             showDownloadModelProgressDialog(context);
           }
         },

@@ -8,7 +8,7 @@ void showDownloadModelDialog(BuildContext context) {
     context: context,
     builder: (context) => DownloadModelDialog(bloc: bloc),
     barrierDismissible: true,
-  );
+  ).then((value) => bloc.add(RefuseDownload()));
 }
 
 class DownloadModelDialog extends StatelessWidget {

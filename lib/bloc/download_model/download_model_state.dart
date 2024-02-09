@@ -11,7 +11,7 @@ final class DownloadingModelIdle extends DownloadModelState {}
 
 final class DownloadingModelInProgress extends DownloadModelState {
   const DownloadingModelInProgress(this.progress);
-  final Stream<DownloadProgress> progress;
+  final DownloadProgress progress;
 
   @override
   List<Object> get props => [progress];
@@ -24,3 +24,5 @@ final class PromptedForDownload extends DownloadModelState {}
 final class AcceptedDownload extends DownloadModelState {}
 
 final class RefusedDownload extends DownloadModelState {}
+
+final class CancelledDownload extends DownloadModelState {}

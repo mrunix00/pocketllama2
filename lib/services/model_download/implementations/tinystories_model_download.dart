@@ -11,6 +11,8 @@ const _downloadUrl =
     "https://huggingface.co/karpathy/tinyllamas/resolve/main/stories15M.bin";
 
 final class TinystoriesModelDownload implements ModelDownloadInterface {
+  static CancelToken? cancelToken;
+
   @override
   Future<bool> isDownloaded() async =>
       File('${(await getApplicationCacheDirectory()).path}/stories15M.bin')
@@ -20,22 +22,33 @@ final class TinystoriesModelDownload implements ModelDownloadInterface {
   Stream<DownloadProgress> downloadModel() {
     final controller = StreamController<DownloadProgress>();
     getApplicationCacheDirectory().then(
-      (downloadPath) async {
+      (downloadPath) {
         final savePath = '${downloadPath.path}/stories15M.bin';
         if (!File(savePath).existsSync()) {
-          await Dio().download(_downloadUrl, '$savePath.tmp',
-              onReceiveProgress: (received, total) {
-            controller.add(DownloadProgress(
-              received,
-              total == -1 ? received : total,
-            ));
+          cancelToken = CancelToken();
+          Dio().download(
+            _downloadUrl,
+            '$savePath.tmp',
+            cancelToken: cancelToken,
+            onReceiveProgress: (received, total) {
+              controller.add(DownloadProgress(
+                received,
+                total == -1 ? received : total,
+              ));
+            },
+          ).then((_) async {
+            await File('$savePath.tmp').rename(savePath);
+            controller.close();
           });
-          await File('$savePath.tmp').rename(savePath);
         }
-        controller.close();
       },
     );
 
     return controller.stream.asBroadcastStream();
+  }
+
+  @override
+  Future<void> cancelCurrentDownload() async {
+    cancelToken!.cancel();
   }
 }

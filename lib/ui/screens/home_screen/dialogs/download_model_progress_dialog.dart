@@ -8,7 +8,7 @@ void showDownloadModelProgressDialog(BuildContext context) {
     context: context,
     builder: (context) => DownloadModelProgressDialog(bloc: bloc),
     barrierDismissible: false,
-  ).then((_) => bloc.add(RefuseDownload()));
+  ).then((_) => bloc.add(CancelDownload()));
 }
 
 class DownloadModelProgressDialog extends StatelessWidget {
@@ -23,26 +23,20 @@ class DownloadModelProgressDialog extends StatelessWidget {
       listener: (context, state) {
         if (state is DownloadingModelSuccess) Navigator.of(context).pop();
       },
-      child: BlocBuilder(
-        bloc: bloc,
-        builder: (context, state) {
-          return AlertDialog.adaptive(
-            title: const Text('Downloading'),
-            content: Row(
-              children: [
-                const CircularProgressIndicator.adaptive(),
-                const SizedBox(width: 20),
-                if (state is DownloadingModelInProgress)
-                  StreamBuilder(
-                    stream: state.progress,
-                    builder: (context, snapshot) => Text(snapshot.hasData
-                        ? '${snapshot.data!.asPercentage()}%'
-                        : ''),
-                  )
-              ],
+      child: AlertDialog.adaptive(
+        title: const Text('Downloading'),
+        content: Row(
+          children: [
+            const CircularProgressIndicator.adaptive(),
+            const SizedBox(width: 20),
+            BlocBuilder(
+              bloc: bloc,
+              builder: (context, state) => state is DownloadingModelInProgress
+                  ? Text(state.progress.asPercentage())
+                  : const SizedBox(),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }

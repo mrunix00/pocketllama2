@@ -13,9 +13,20 @@ class DownloadModelBloc extends Bloc<DownloadModelEvent, DownloadModelState> {
     on<RefuseDownload>((event, emit) => emit(RefusedDownload()));
     on<AcceptDownload>(
       (event, emit) async {
-        emit(DownloadingModelInProgress(modelDownload.downloadModel()));
-        await modelDownload.downloadModel().last;
+        emit(AcceptedDownload());
+        final currentDownload = modelDownload.downloadModel();
+        await emit.forEach(
+          currentDownload,
+          onData: (progress) => DownloadingModelInProgress(progress),
+        );
         emit(DownloadingModelSuccess());
+      },
+    );
+
+    on<CancelDownload>(
+      (event, emit) async {
+        await modelDownload.cancelCurrentDownload();
+        emit(CancelledDownload());
       },
     );
   }
