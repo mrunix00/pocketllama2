@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../bloc/download_model/download_model_bloc.dart';
 import '../../../bloc/generate_text/generate_text_bloc.dart';
-import '../../../services/model_download/implementations/tinystories_model_download.dart';
-import '../../../services/text_generation/implementations/llama2_mock.dart';
 import '../../widgets/layout/column_container.dart';
 import 'dialogs/download_model_dialog.dart';
 import 'dialogs/download_model_progress_dialog.dart';
@@ -19,12 +18,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
-    final downloadModelBloc = DownloadModelBloc(TinystoriesModelDownload());
+    final downloadModelBloc = GetIt.I.get<DownloadModelBloc>();
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => GenerateTextBloc(LlamaMock()),
+          create: (context) => GetIt.I.get<GenerateTextBloc>(),
         ),
         BlocProvider(
           create: (context) => downloadModelBloc,
