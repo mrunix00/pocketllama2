@@ -20,20 +20,19 @@ final class TinystoriesModelDownload implements ModelDownloadInterface {
   Stream<DownloadProgress> downloadModel() {
     final controller = StreamController<DownloadProgress>();
     getApplicationCacheDirectory().then(
-      (downloadPath) {
-        if (!File('${downloadPath.path}/stories15M.bin').existsSync()) {
-          Dio().download(
-            _downloadUrl,
-            '${downloadPath.path}/stories15M.bin',
-            onReceiveProgress: (received, total) {
-              if (total != -1) {
-                controller.add(DownloadProgress(received, total));
-              }
-            },
-          ).then((_) => controller.close());
-        } else {
-          controller.close();
+      (downloadPath) async {
+        final savePath = '${downloadPath.path}/stories15M.bin';
+        if (!File(savePath).existsSync()) {
+          await Dio().download(_downloadUrl, '$savePath.tmp',
+              onReceiveProgress: (received, total) {
+            controller.add(DownloadProgress(
+              received,
+              total == -1 ? received : total,
+            ));
+          });
+          await File('$savePath.tmp').rename(savePath);
         }
+        controller.close();
       },
     );
 
