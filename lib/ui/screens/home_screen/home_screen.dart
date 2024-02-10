@@ -43,6 +43,10 @@ class HomeScreen extends StatelessWidget {
             systemOverlayStyle: SystemUiOverlayStyle(
               systemNavigationBarColor:
                   Theme.of(context).colorScheme.background,
+              systemNavigationBarIconBrightness:
+                  Theme.of(context).brightness == Brightness.light
+                      ? Brightness.dark
+                      : Brightness.light,
             ),
             title: const Text('PocketLlama2'),
             actions: [
