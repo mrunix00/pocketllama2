@@ -21,6 +21,7 @@ class GenerateTextBloc extends Bloc<GenerateTextEvent, GenerateTextState> {
 
     on<StopGeneratingText>((event, emit) async {
       await textGenerationInterface.stop();
+      emit(GeneratingTextIdle());
     });
   }
 }
