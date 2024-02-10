@@ -14,33 +14,42 @@ final class TinystoriesModelDownload implements ModelDownloadInterface {
   static CancelToken? cancelToken;
 
   @override
-  Future<bool> isDownloaded() async =>
-      File('${(await getApplicationCacheDirectory()).path}/stories15M.bin')
-          .exists();
+  Future<bool> isDownloaded() async {
+    var path = (await getApplicationDocumentsDirectory()).path;
+    return File('$path/stories15M.bin').existsSync() &&
+        File('$path/tokenizer.bin').existsSync();
+  }
 
   @override
   Stream<DownloadProgress> downloadModel() {
     final controller = StreamController<DownloadProgress>();
-    getApplicationCacheDirectory().then(
-      (downloadPath) {
-        final savePath = '${downloadPath.path}/stories15M.bin';
-        if (!File(savePath).existsSync()) {
+    getApplicationDocumentsDirectory().then(
+      (downloadPath) async {
+        final modelSavePath = '${downloadPath.path}/stories15M.bin';
+        if (!File(modelSavePath).existsSync()) {
           cancelToken = CancelToken();
-          Dio().download(
+          await Dio().download(
             _downloadUrl,
-            '$savePath.tmp',
+            modelSavePath,
             cancelToken: cancelToken,
+            deleteOnError: true,
             onReceiveProgress: (received, total) {
               controller.add(DownloadProgress(
                 received,
                 total == -1 ? received : total,
               ));
             },
-          ).then((_) async {
-            await File('$savePath.tmp').rename(savePath);
-            controller.close();
-          });
+          );
         }
+        final tokenizerSavePath = '${downloadPath.path}/tokenizer.bin';
+        if (!File(tokenizerSavePath).existsSync()) {
+          await Dio().download(
+            'https://github.com/mrunix00/llama2dart/raw/master/tokenizer.bin',
+            '${downloadPath.path}/tokenizer.bin',
+            deleteOnError: true,
+          );
+        }
+        controller.close();
       },
     );
 
