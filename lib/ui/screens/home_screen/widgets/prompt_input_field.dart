@@ -12,22 +12,23 @@ class PromptInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        TextField(
-          controller: controller,
-          decoration: const InputDecoration(
-            hintText: 'Prompt',
-            filled: true,
-            border: UnderlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-              borderSide: BorderSide.none,
+    return BlocBuilder<GenerateTextBloc, GenerateTextState>(
+      builder: (context, state) {
+        return Stack(
+          children: [
+            TextField(
+              controller: controller,
+              enabled: state is! GeneratingTextInProgress,
+              decoration: const InputDecoration(
+                hintText: 'Prompt',
+                filled: true,
+                border: UnderlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
-          ),
-        ),
-        BlocBuilder<GenerateTextBloc, GenerateTextState>(
-          builder: (context, state) {
-            return state is! GeneratingTextInProgress
+            state is! GeneratingTextInProgress
                 ? const SizedBox()
                 : const Positioned(
                     top: 8,
@@ -35,10 +36,10 @@ class PromptInputField extends StatelessWidget {
                     width: 30,
                     height: 30,
                     child: CircularProgressIndicator.adaptive(),
-                  );
-          },
-        ),
-      ],
+                  ),
+          ],
+        );
+      },
     );
   }
 }
