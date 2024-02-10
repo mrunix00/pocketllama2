@@ -14,31 +14,22 @@ class GenerateButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: 40,
-      child: BlocBuilder<GenerateTextBloc, GenerateTextState>(
-        builder: (context, state) {
-          if (state is GeneratingTextInProgress) {
-            return const CircularProgressIndicator.adaptive();
+    return IconButton.filled(
+      iconSize: 20,
+      onPressed: () {
+        TinystoriesModelDownload().isDownloaded().then((value) {
+          if (value) {
+            BlocProvider.of<GenerateTextBloc>(context).add(
+              GenerateText(prompt: controller.text),
+            );
+          } else {
+            BlocProvider.of<DownloadModelBloc>(context).add(
+              PromptForDownload(),
+            );
           }
-          return IconButton.filled(
-            onPressed: () {
-              TinystoriesModelDownload().isDownloaded().then((value) {
-                if (value) {
-                  BlocProvider.of<GenerateTextBloc>(context).add(
-                    GenerateText(prompt: controller.text),
-                  );
-                } else {
-                  BlocProvider.of<DownloadModelBloc>(context).add(
-                    PromptForDownload(),
-                  );
-                }
-              });
-            },
-            icon: const Icon(Icons.edit),
-          );
-        },
-      ),
+        });
+      },
+      icon: const Icon(Icons.edit),
     );
   }
 }

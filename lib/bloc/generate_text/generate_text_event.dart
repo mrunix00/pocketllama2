@@ -11,3 +11,5 @@ final class GenerateText extends GenerateTextEvent {
   final String prompt;
   const GenerateText({required this.prompt});
 }
+
+final class StopGeneratingText extends GenerateTextEvent {}

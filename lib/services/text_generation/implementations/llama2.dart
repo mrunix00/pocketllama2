@@ -12,6 +12,7 @@ class _Message {
 }
 
 final class Llama2 implements TextGenerationInterface {
+  late Isolate process;
   @override
   Stream<String> generateText(String prompt) async* {
     final controller = StreamController<String>();
@@ -19,7 +20,7 @@ final class Llama2 implements TextGenerationInterface {
     var text = "";
     final directory = await getApplicationDocumentsDirectory();
 
-    Isolate.spawn(
+    process = await Isolate.spawn(
       (_Message message) {
         final stream = llama2
             .generate_text(
@@ -44,5 +45,10 @@ final class Llama2 implements TextGenerationInterface {
       }
     });
     yield* controller.stream.asBroadcastStream();
+  }
+
+  @override
+  Future<void> stop() async {
+    process.kill(priority: Isolate.immediate);
   }
 }

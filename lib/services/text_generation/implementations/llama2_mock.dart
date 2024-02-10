@@ -3,8 +3,10 @@ import 'dart:async';
 import '../text_generation_interface.dart';
 
 final class LlamaMock implements TextGenerationInterface {
+  late StreamController<String> streamController;
   @override
   Stream<String> generateText(String prompt) async* {
+    streamController = StreamController<String>();
     const String copypasta = '''
       I'd just like to interject for a moment. What you're refering to as Linux, is in fact, GNU/Linux, or as I've recently taken to calling it, GNU plus Linux. Linux is not an operating system unto itself, but rather another free component of a fully functioning GNU system made useful by the GNU corelibs, shell utilities and vital system components comprising a full OS as defined by POSIX.
       Many computer users run a modified version of the GNU system every day, without realizing it. Through a peculiar turn of events, the version of GNU which is widely used today is often called Linux, and many of its users are not aware that it is basically the GNU system, developed by the GNU Project.
@@ -14,7 +16,13 @@ final class LlamaMock implements TextGenerationInterface {
     for (final word in copypasta.split(' ')) {
       currentText += '$word ';
       await Future.delayed(const Duration(milliseconds: 20));
-      yield currentText;
+      streamController.add(currentText);
     }
+    yield* streamController.stream;
+  }
+
+  @override
+  Future<void> stop() async {
+    streamController.close();
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pocketllama2/ui/screens/home_screen/widgets/stop_button.dart';
 
 import '../../../bloc/download_model/download_model_bloc.dart';
 import '../../../bloc/generate_text/generate_text_bloc.dart';
@@ -19,15 +20,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
     final downloadModelBloc = GetIt.I.get<DownloadModelBloc>();
+    final generateTextBloc = GetIt.I.get<GenerateTextBloc>();
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => GetIt.I.get<GenerateTextBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => downloadModelBloc,
-        ),
+        BlocProvider(create: (context) => generateTextBloc),
+        BlocProvider(create: (context) => downloadModelBloc),
       ],
       child: BlocListener(
         bloc: downloadModelBloc,
@@ -63,7 +61,13 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Expanded(child: PromptInputField(controller: controller)),
                   const SizedBox(width: 10),
-                  GenerateButton(controller: controller),
+                  BlocBuilder<GenerateTextBloc, GenerateTextState>(
+                    builder: (context, state) {
+                      return state is GeneratingTextInProgress
+                          ? const StopButton()
+                          : GenerateButton(controller: controller);
+                    },
+                  ),
                 ],
               ),
             ],
