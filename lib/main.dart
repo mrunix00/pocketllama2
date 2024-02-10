@@ -2,8 +2,10 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 
 import 'ui/screens/home_screen/home_screen.dart';
+import 'utils/di_container.dart';
 
 void main() {
+  setupDependencyInjector();
   runApp(const MyApp());
 }
 
