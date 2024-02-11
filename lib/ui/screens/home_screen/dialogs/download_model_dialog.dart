@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pocketllama2/bloc/download_model/download_model_bloc.dart';
+
+import '../../../../bloc/text_generation/text_generation_bloc.dart';
 
 void showDownloadModelDialog(BuildContext context) {
-  final bloc = BlocProvider.of<DownloadModelBloc>(context);
+  final bloc = BlocProvider.of<TextGenerationBloc>(context);
   showDialog(
     context: context,
     builder: (context) => DownloadModelDialog(bloc: bloc),
@@ -14,7 +15,7 @@ void showDownloadModelDialog(BuildContext context) {
 class DownloadModelDialog extends StatelessWidget {
   const DownloadModelDialog({super.key, required this.bloc});
 
-  final DownloadModelBloc bloc;
+  final TextGenerationBloc bloc;
 
   @override
   Widget build(BuildContext context) {

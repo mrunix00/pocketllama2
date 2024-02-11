@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pocketllama2/bloc/download_model/download_model_bloc.dart';
+
+import '../../../../bloc/text_generation/text_generation_bloc.dart';
 
 void showDownloadModelProgressDialog(BuildContext context) {
-  final bloc = BlocProvider.of<DownloadModelBloc>(context);
+  final bloc = BlocProvider.of<TextGenerationBloc>(context);
   showDialog(
     context: context,
     builder: (context) => DownloadModelProgressDialog(bloc: bloc),
@@ -14,14 +15,14 @@ void showDownloadModelProgressDialog(BuildContext context) {
 class DownloadModelProgressDialog extends StatelessWidget {
   const DownloadModelProgressDialog({super.key, required this.bloc});
 
-  final DownloadModelBloc bloc;
+  final TextGenerationBloc bloc;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener(
       bloc: bloc,
       listener: (context, state) {
-        if (state is DownloadingModelSuccess) Navigator.of(context).pop();
+        if (state is ModelDownloadSuccess) Navigator.of(context).pop();
       },
       child: AlertDialog.adaptive(
         title: const Text('Downloading'),
@@ -31,7 +32,7 @@ class DownloadModelProgressDialog extends StatelessWidget {
             const SizedBox(width: 20),
             BlocBuilder(
               bloc: bloc,
-              builder: (context, state) => state is DownloadingModelInProgress
+              builder: (context, state) => state is ModelDownloadInProgress
                   ? Text(state.progress.asPercentage())
                   : const SizedBox(),
             ),

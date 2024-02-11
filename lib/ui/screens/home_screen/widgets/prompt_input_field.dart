@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pocketllama2/bloc/generate_text/generate_text_bloc.dart';
+
+import '../../../../bloc/text_generation/text_generation_bloc.dart';
 
 class PromptInputField extends StatelessWidget {
   const PromptInputField({
@@ -12,13 +13,13 @@ class PromptInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GenerateTextBloc, GenerateTextState>(
+    return BlocBuilder<TextGenerationBloc, TextGenerationState>(
       builder: (context, state) {
         return Stack(
           children: [
             TextField(
               controller: controller,
-              enabled: state is! GeneratingTextInProgress,
+              enabled: state is! TextGenerationInProgress,
               textCapitalization: TextCapitalization.sentences,
               decoration: const InputDecoration(
                 hintText: 'Prompt',
@@ -29,7 +30,7 @@ class PromptInputField extends StatelessWidget {
                 ),
               ),
             ),
-            state is! GeneratingTextInProgress
+            state is! TextGenerationInProgress
                 ? const SizedBox()
                 : const Positioned(
                     top: 8,

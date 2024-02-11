@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pocketllama2/ui/screens/home_screen/widgets/stop_button.dart';
 
-import '../../../bloc/download_model/download_model_bloc.dart';
-import '../../../bloc/generate_text/generate_text_bloc.dart';
+import '../../../bloc/text_generation/text_generation_bloc.dart';
 import '../../widgets/layout/column_container.dart';
 import 'dialogs/download_model_dialog.dart';
 import 'dialogs/download_model_progress_dialog.dart';
 import 'widgets/generate_button.dart';
 import 'widgets/generated_text_output.dart';
 import 'widgets/prompt_input_field.dart';
+import 'widgets/stop_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -19,20 +18,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
-    final downloadModelBloc = GetIt.I.get<DownloadModelBloc>();
-    final generateTextBloc = GetIt.I.get<GenerateTextBloc>();
+    final bloc = GetIt.I.get<TextGenerationBloc>();
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => generateTextBloc),
-        BlocProvider(create: (context) => downloadModelBloc),
-      ],
+    return BlocProvider(
+      create: (context) => bloc,
       child: BlocListener(
-        bloc: downloadModelBloc,
+        bloc: bloc,
         listener: (context, state) {
-          if (state is PromptedForDownload) {
+          if (state is PromptForModelDownload) {
             showDownloadModelDialog(context);
-          } else if (state is AcceptedDownload) {
+          } else if (state is ModelDownloadAccepted) {
             showDownloadModelProgressDialog(context);
           }
         },
@@ -61,9 +56,9 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Expanded(child: PromptInputField(controller: controller)),
                   const SizedBox(width: 10),
-                  BlocBuilder<GenerateTextBloc, GenerateTextState>(
+                  BlocBuilder<TextGenerationBloc, TextGenerationState>(
                     builder: (context, state) {
-                      return state is GeneratingTextInProgress
+                      return state is TextGenerationInProgress
                           ? const StopButton()
                           : GenerateButton(controller: controller);
                     },
