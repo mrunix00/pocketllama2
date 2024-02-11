@@ -20,7 +20,7 @@ class GenerateButton extends StatelessWidget {
         TinystoriesModelDownload().isDownloaded().then((value) {
           if (value) {
             BlocProvider.of<GenerateTextBloc>(context).add(
-              GenerateText(prompt: controller.text),
+              GenerateText(prompt: controller.text.trim()),
             );
           } else {
             BlocProvider.of<DownloadModelBloc>(context).add(
