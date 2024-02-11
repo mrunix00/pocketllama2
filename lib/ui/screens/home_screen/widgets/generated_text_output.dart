@@ -13,19 +13,13 @@ class GeneratedTextOutput extends StatelessWidget {
         margin: const EdgeInsets.all(10),
         child: SingleChildScrollView(
           child: BlocBuilder<TextGenerationBloc, TextGenerationState>(
-            buildWhen: (previous, current) => current is! TextGenerationIdle,
+            buildWhen: (previous, current) =>
+                current is! TextGenerationIdle &&
+                current is! TextGenerationSuccess,
             builder: (context, state) {
               if (state is TextGenerationInProgress) {
-                return StreamBuilder<String>(
-                  stream: state.textStream,
-                  builder: (context, snapshot) => Text(
-                    snapshot.data ?? '',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                );
-              } else if (state is TextGenerationSuccess) {
                 return Text(
-                  state.finalText,
+                  state.text,
                   style: Theme.of(context).textTheme.bodyLarge,
                 );
               }

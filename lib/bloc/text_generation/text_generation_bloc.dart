@@ -20,9 +20,11 @@ class TextGenerationBloc
     on<GenerateText>((event, emit) async {
       if (await modelDownload.isDownloaded()) {
         final textStream = textGenerator.generateText(event.prompt);
-        emit(TextGenerationInProgress(textStream));
-        final text = await textStream.last;
-        emit(TextGenerationSuccess(text));
+        await emit.forEach(
+          textStream,
+          onData: (text) => TextGenerationInProgress(text),
+        );
+        emit(TextGenerationSuccess());
       } else {
         emit(PromptForModelDownload());
       }

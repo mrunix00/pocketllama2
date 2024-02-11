@@ -10,22 +10,15 @@ sealed class TextGenerationState extends Equatable {
 final class TextGenerationIdle extends TextGenerationState {}
 
 final class TextGenerationInProgress extends TextGenerationState {
-  const TextGenerationInProgress(this.textStream);
+  const TextGenerationInProgress(this.text);
 
-  final Stream<String> textStream;
-
-  @override
-  List<Object> get props => [textStream];
-}
-
-final class TextGenerationSuccess extends TextGenerationState {
-  const TextGenerationSuccess(this.finalText);
-
-  final String finalText;
+  final String text;
 
   @override
-  List<Object> get props => [finalText];
+  List<Object> get props => [text];
 }
+
+final class TextGenerationSuccess extends TextGenerationState {}
 
 final class PromptForModelDownload extends TextGenerationState {}
 
