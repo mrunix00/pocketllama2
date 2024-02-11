@@ -44,7 +44,7 @@ final class TinystoriesModelDownload implements ModelDownloadInterface {
         final tokenizerSavePath = '${downloadPath.path}/tokenizer.bin';
         if (!File(tokenizerSavePath).existsSync()) {
           await Dio().download(
-            'https://github.com/mrunix00/llama2dart/raw/master/tokenizer.bin',
+            'https://github.com/karpathy/llama2.c/raw/master/tokenizer.bin',
             '${downloadPath.path}/tokenizer.bin',
             deleteOnError: true,
           );
