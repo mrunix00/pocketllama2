@@ -22,8 +22,7 @@ class HomeScreen extends StatelessWidget {
 
     return BlocProvider(
       create: (context) => bloc,
-      child: BlocListener(
-        bloc: bloc,
+      child: BlocListener<TextGenerationBloc, TextGenerationState>(
         listener: (context, state) {
           if (state is PromptForModelDownload) {
             showDownloadModelDialog(context);
