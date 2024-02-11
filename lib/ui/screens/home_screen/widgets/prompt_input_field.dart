@@ -19,6 +19,7 @@ class PromptInputField extends StatelessWidget {
             TextField(
               controller: controller,
               enabled: state is! GeneratingTextInProgress,
+              textCapitalization: TextCapitalization.sentences,
               decoration: const InputDecoration(
                 hintText: 'Prompt',
                 filled: true,
