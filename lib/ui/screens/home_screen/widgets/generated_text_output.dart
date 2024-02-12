@@ -14,8 +14,7 @@ class GeneratedTextOutput extends StatelessWidget {
         child: SingleChildScrollView(
           child: BlocBuilder<TextGenerationBloc, TextGenerationState>(
             buildWhen: (previous, current) =>
-                current is! TextGenerationIdle &&
-                current is! TextGenerationSuccess,
+                current is TextGenerationInProgress,
             builder: (context, state) {
               if (state is TextGenerationInProgress) {
                 return Text(

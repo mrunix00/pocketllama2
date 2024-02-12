@@ -23,6 +23,7 @@ class TextGenerationBloc
         await emit.forEach(
           textStream,
           onData: (text) => TextGenerationInProgress(text),
+          onError: (error, stackTrace) => TextGenerationFailure(),
         );
         emit(TextGenerationSuccess());
       } else {

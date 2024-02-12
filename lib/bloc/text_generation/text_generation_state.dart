@@ -20,6 +20,8 @@ final class TextGenerationInProgress extends TextGenerationState {
 
 final class TextGenerationSuccess extends TextGenerationState {}
 
+final class TextGenerationFailure extends TextGenerationState {}
+
 final class PromptForModelDownload extends TextGenerationState {}
 
 final class ModelDownloadInProgress extends TextGenerationState {

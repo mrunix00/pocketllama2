@@ -2,17 +2,14 @@ import 'dart:async';
 import 'dart:isolate';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:pocketllama2/utils/failure.dart';
 
 import '../text_generation_interface.dart';
 import '../../../utils/llama2.dart' as llama2;
 
-class _Message {
-  _Message({required this.sendPort});
-  SendPort sendPort;
-}
-
 final class Llama2 implements TextGenerationInterface {
   late Isolate process;
+
   @override
   Stream<String> generateText(String prompt) async* {
     final controller = StreamController<String>();
@@ -21,7 +18,7 @@ final class Llama2 implements TextGenerationInterface {
     final directory = await getApplicationDocumentsDirectory();
 
     process = await Isolate.spawn(
-      (_Message message) {
+      (SendPort sendPort) {
         final stream = llama2
             .generate_text(
               checkpoint_path: '${directory.path}/stories15M.bin',
@@ -29,19 +26,25 @@ final class Llama2 implements TextGenerationInterface {
               prompt: prompt,
             )
             .asBroadcastStream();
-        stream
-            .listen((event) => message.sendPort.send(event))
-            .onDone(() => message.sendPort.send(null));
+        stream.listen(
+          (event) => sendPort.send(event),
+          onDone: () => sendPort.send(null),
+          onError: (error) => sendPort.send(
+            const Failure('Text generation failed!'),
+          ),
+        );
       },
-      _Message(sendPort: receivePort.sendPort),
+      receivePort.sendPort,
     );
 
     receivePort.listen((message) {
-      if (message != null) {
+      if (message == null) {
+        controller.close();
+      } else if (message is Failure) {
+        controller.addError(message);
+      } else {
         text += message;
         controller.add(text);
-      } else {
-        controller.close();
       }
     });
     yield* controller.stream.asBroadcastStream();

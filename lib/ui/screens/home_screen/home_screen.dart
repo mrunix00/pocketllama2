@@ -7,6 +7,7 @@ import '../../../bloc/text_generation/text_generation_bloc.dart';
 import '../../widgets/layout/column_container.dart';
 import 'dialogs/download_model_dialog.dart';
 import 'dialogs/download_model_progress_dialog.dart';
+import 'dialogs/text_generation_error_dialog.dart';
 import 'widgets/generate_button.dart';
 import 'widgets/generated_text_output.dart';
 import 'widgets/prompt_input_field.dart';
@@ -28,6 +29,8 @@ class HomeScreen extends StatelessWidget {
             showDownloadModelDialog(context);
           } else if (state is ModelDownloadAccepted) {
             showDownloadModelProgressDialog(context);
+          } else if (state is TextGenerationFailure) {
+            showTextGenerationErrorDialog(context);
           }
         },
         child: Scaffold(
