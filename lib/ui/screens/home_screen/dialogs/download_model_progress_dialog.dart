@@ -9,7 +9,7 @@ void showDownloadModelProgressDialog(BuildContext context) {
     context: context,
     builder: (context) => DownloadModelProgressDialog(bloc: bloc),
     barrierDismissible: false,
-  ).then((_) => bloc.add(CancelDownload()));
+  );
 }
 
 class DownloadModelProgressDialog extends StatelessWidget {
@@ -38,6 +38,15 @@ class DownloadModelProgressDialog extends StatelessWidget {
             ),
           ],
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              bloc.add(CancelDownload());
+            },
+            child: const Text('Cancel'),
+          )
+        ],
       ),
     );
   }

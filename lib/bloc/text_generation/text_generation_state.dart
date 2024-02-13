@@ -39,3 +39,5 @@ final class ModelDownloadAccepted extends TextGenerationState {}
 final class ModelDownloadRefused extends TextGenerationState {}
 
 final class ModelDownloadCancelled extends TextGenerationState {}
+
+final class ModelDownloadFailure extends TextGenerationState {}

@@ -42,6 +42,7 @@ class TextGenerationBloc
       await emit.forEach(
         currentDownload,
         onData: (progress) => ModelDownloadInProgress(progress),
+        onError: (error, stackTrace) => ModelDownloadFailure(),
       );
       emit(ModelDownloadSuccess());
     });

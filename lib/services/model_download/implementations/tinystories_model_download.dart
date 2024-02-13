@@ -55,7 +55,11 @@ final class TinystoriesModelDownload implements ModelDownloadInterface {
           }
           controller.close();
         } catch (error) {
-          controller.addError(error);
+          if (error is DioException && error.type == DioExceptionType.cancel) {
+            await cancelCurrentDownload();
+          } else {
+            controller.addError(error);
+          }
         }
       },
     );

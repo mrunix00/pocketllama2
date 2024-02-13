@@ -9,7 +9,7 @@ void showDownloadModelDialog(BuildContext context) {
     context: context,
     builder: (context) => DownloadModelDialog(bloc: bloc),
     barrierDismissible: true,
-  ).then((value) => bloc.add(RefuseDownload()));
+  );
 }
 
 class DownloadModelDialog extends StatelessWidget {
@@ -34,7 +34,10 @@ class DownloadModelDialog extends StatelessWidget {
           child: const Text('Yes'),
         ),
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.of(context).pop();
+            bloc.add(RefuseDownload());
+          },
           child: const Text('No'),
         ),
       ],

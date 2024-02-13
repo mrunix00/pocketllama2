@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pocketllama2/ui/screens/home_screen/dialogs/download_model_failure_dialog.dart';
 
 import '../../../bloc/text_generation/text_generation_bloc.dart';
 import '../../widgets/layout/column_container.dart';
@@ -29,6 +30,11 @@ class HomeScreen extends StatelessWidget {
             showDownloadModelDialog(context);
           } else if (state is ModelDownloadAccepted) {
             showDownloadModelProgressDialog(context);
+          } else if (state is ModelDownloadFailure) {
+            if (Navigator.canPop(context)) {
+              Navigator.of(context).pop();
+            }
+            showDownloadModelFailureDialog(context);
           } else if (state is TextGenerationFailure) {
             showTextGenerationErrorDialog(context);
           }
