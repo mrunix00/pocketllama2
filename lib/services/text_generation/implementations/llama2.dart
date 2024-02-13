@@ -15,7 +15,7 @@ final class Llama2 implements TextGenerationInterface {
     final controller = StreamController<String>();
     final receivePort = ReceivePort();
     var text = "";
-    final directory = await getApplicationDocumentsDirectory();
+    final directory = await getApplicationCacheDirectory();
 
     process = await Isolate.spawn(
       (SendPort sendPort) {
