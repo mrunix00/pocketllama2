@@ -6,6 +6,7 @@ import 'package:pocketllama2/ui/screens/home_screen/dialogs/download_model_failu
 
 import '../../../bloc/text_generation/text_generation_bloc.dart';
 import '../../widgets/layout/column_container.dart';
+import 'dialogs/about_dialog.dart';
 import 'dialogs/download_model_dialog.dart';
 import 'dialogs/download_model_progress_dialog.dart';
 import 'dialogs/text_generation_error_dialog.dart';
@@ -51,9 +52,25 @@ class HomeScreen extends StatelessWidget {
             ),
             title: const Text('PocketLlama2'),
             actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.settings),
+              MenuAnchor(
+                menuChildren: [
+                  MenuItemButton(
+                    child: const Text('About'),
+                    onPressed: () {
+                      showAboutPocketLlamaDialog(context);
+                    },
+                  ),
+                ],
+                builder: (context, controller, child) => IconButton(
+                  icon: const Icon(Icons.more_vert),
+                  onPressed: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
+                    }
+                  },
+                ),
               ),
             ],
           ),
