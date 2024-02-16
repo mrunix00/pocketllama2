@@ -33,7 +33,7 @@ class DownloadModelProgressDialog extends StatelessWidget {
             BlocBuilder(
               bloc: bloc,
               builder: (context, state) => state is ModelDownloadInProgress
-                  ? Text(state.progress.asPercentage())
+                  ? Text('${state.progress.asPercentage()}%')
                   : const SizedBox(),
             ),
           ],
