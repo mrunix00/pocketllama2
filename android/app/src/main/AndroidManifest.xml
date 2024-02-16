@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="pocketllama2"
+        android:label="PocketLlama2"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
